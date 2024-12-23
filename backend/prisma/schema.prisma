@@ -1,0 +1,216 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String              @id @default(uuid())
+  email              String              @unique
+  password           String              @db.VarChar(256)
+  name               String              @db.VarChar(128)
+  lastName           String              @db.VarChar(128)
+  dni                String              @db.VarChar(56)
+  phone              String              @default("sin teléfono") @db.VarChar(128)
+  birthDate          DateTime            @default(now())
+  gender             Gender              @default(OTHER)
+  role               Role                @relation(fields: [roleId], references: [id])
+  roleId             String
+  isActive           Boolean             @default(true)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  deletedAt          DateTime?
+  enrollments        Enrollment[]
+  subjectTeachers    SubjectTeacher[]
+  attendanceStudents AttendanceStudent[]
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model Role {
+  id    String @id @default(uuid())
+  name  String @unique
+  users User[]
+}
+
+// guarda el hiostorial por año de quien fue inscrito a la asignatura
+model AcademicYear {
+  id              String           @id @default(uuid())
+  year            Int
+  grades          Grade[]
+  enrollments     Enrollment[]
+  subjectTeachers SubjectTeacher[]
+  classes         Class[]
+}
+
+model Grade {
+  id           String         @id @default(uuid())
+  name         String
+  academicYear AcademicYear   @relation(fields: [yearId], references: [id])
+  yearId       String
+  isDeleted    Boolean        @default(false)
+  subjects     GradeSubject[]
+
+  @@unique([name, yearId])
+}
+
+model GradeSubject {
+  id        String  @id @default(uuid())
+  grade     Grade   @relation(fields: [gradeId], references: [id])
+  gradeId   String
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  subjectId String
+}
+
+model Subject {
+  id              String           @id @default(uuid())
+  name            String
+  description     String           @db.VarChar(256)
+  scheduleInit    String           @db.VarChar(128)
+  scheduleEnd     String           @db.VarChar(128)
+  gradeSubjects   GradeSubject[]
+  classes         Class[]
+  enrollments     Enrollment[]
+  subjectTeachers SubjectTeacher[]
+  division        Division         @relation(fields: [divisionId], references: [id])
+  divisionId      String
+  category        SubjectCategory  @relation(fields: [categoryId], references: [id])
+  categoryId      String
+  isDeleted       Boolean          @default(false)
+}
+
+model SubjectCategory {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  subjects Subject[]
+}
+
+model SubjectTeacher {
+  id           String       @id @default(uuid())
+  subject      Subject      @relation(fields: [subjectId], references: [id])
+  subjectId    String
+  teacher      User         @relation(fields: [teacherId], references: [id])
+  teacherId    String
+  academicYear AcademicYear @relation(fields: [yearId], references: [id])
+  yearId       String
+}
+
+//me permite rastrear en que materia se encuentra un estudiante y su division
+model Enrollment {
+  id         String       @id @default(uuid())
+  student    User         @relation(fields: [studentId], references: [id])
+  studentId  String
+  division   Division     @relation(fields: [divisionId], references: [id])
+  divisionId String
+  year       AcademicYear @relation(fields: [yearId], references: [id])
+  yearId     String
+  subject    Subject      @relation(fields: [subjectId], references: [id])
+  subjectId  String
+  isDeleted  Boolean      @default(false)
+
+  @@unique([studentId, subjectId, divisionId, yearId])
+}
+
+//las clases pertenecen a una materia,división y a un año escolar especifico
+model Class {
+  id          String       @id @default(uuid())
+  name        String
+  date        DateTime
+  subject     Subject      @relation(fields: [subjectId], references: [id])
+  subjectId   String
+  year        AcademicYear @relation(fields: [yearId], references: [id])
+  yearId      String
+  activities  Activity[]
+  isDeleted   Boolean      @default(false)
+  attendances Attendance[]
+
+  @@unique([name, subjectId, yearId, date])
+}
+
+model Division {
+  id          String       @id @default(uuid())
+  name        String
+  isDeleted   Boolean      @default(false)
+  enrollments Enrollment[]
+  subjects    Subject[]
+}
+
+// Temporal 
+
+enum ActivityType {
+  ASSIGNMENT
+  EXAM
+  OTHER
+}
+
+enum ActivityStatus {
+  PENDING
+  COMPLETED
+  OVERDUE
+}
+
+model Activity {
+  id           String         @id @default(uuid())
+  name         String         @db.VarChar(128)
+  description  String?        @db.VarChar(256)
+  activityType ActivityType
+  status       ActivityStatus @default(PENDING)
+  startDate    DateTime       @default(now())
+  dueDate      DateTime
+  files        String[]
+  class        Class          @relation(fields: [classId], references: [id])
+  classId      String
+}
+
+model Bulletin {
+  id          String    @id @default(uuid())
+  title       String    @db.VarChar(128)
+  description String    @db.VarChar(256)
+  scope       String    @db.VarChar(128)
+  eventDate   DateTime
+  isActivated Boolean   @default(true)
+  isDeleted   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+}
+
+model Attendance {
+  id                String              @id @default(uuid())
+  class             Class               @relation(fields: [classId], references: [id])
+  classId           String
+  eventDate         DateTime
+  status            String              @db.VarChar(128)
+  attendanceStudent AttendanceStudent[]
+  isDeleted         Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  deletedAt         DateTime?
+}
+
+model AttendanceStudent {
+  id           String     @id @default(uuid())
+  student      User       @relation(fields: [studentId], references: [id])
+  studentId    String
+  attendance   Attendance @relation(fields: [attendanceId], references: [id])
+  attendanceId String
+  status       String     @db.VarChar(128)
+  observation  String     @db.VarChar(256)
+  isDeleted    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?
+}
