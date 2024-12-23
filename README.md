@@ -225,6 +225,26 @@ Explora cómo funciona EducaPro en nuestra demo en vivo:
     </td>
   </tr>
 </table>
+
+<table style="border: 1px solid #e1e4e8; border-radius: 8px; padding: 10px; margin: 10px; width: 350px; display: inline-block;">
+  <tr>
+    <td style="padding: 10px;">
+      <img src="https://media.licdn.com/dms/image/v2/D5603AQEflVCndXs2xg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1725142846435?e=1740614400&v=beta&t=b2z-LbxRZQM-4HkKR8yQ3ypdn54dtf9DUB0yETtOd00" alt="Bárbara Espinola" style="border-radius: 50%; width: 80px; height: 80px; object-fit: cover;">
+    </td>
+    <td style="padding: 10px;">
+      <h3 style="margin: 0; font-size: 1.2em;">Tomás Zarriello</h3>
+      <p style="margin: 5px 0;">
+        <a href="https://www.linkedin.com/in/tomas-zarriello/" style="text-decoration: none;">
+          <img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white" alt="LinkedIn">
+        </a>
+        <a href="https://github.com/Tommyx66" style="text-decoration: none; margin-left: 10px;">
+          <img src="https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white" alt="GitHub">
+        </a>
+      </p>
+      <img src="https://flagcdn.com/64x48/ar.png" alt="ar flag" style="width: 32px; height: 24px; margin-top: 5px;">
+    </td>
+  </tr>
+</table>
     
 ### Backend
 
@@ -264,26 +284,6 @@ Explora cómo funciona EducaPro en nuestra demo en vivo:
         </a>
       </p>
       <img src="https://flagcdn.com/64x48/ec.png" alt="ec flag" style="width: 32px; height: 24px; margin-top: 5px;">
-    </td>
-  </tr>
-</table>
-
-<table style="border: 1px solid #e1e4e8; border-radius: 8px; padding: 10px; margin: 10px; width: 350px; display: inline-block;">
-  <tr>
-    <td style="padding: 10px;">
-      <img src="https://media.licdn.com/dms/image/v2/D5603AQEflVCndXs2xg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1725142846435?e=1740614400&v=beta&t=b2z-LbxRZQM-4HkKR8yQ3ypdn54dtf9DUB0yETtOd00" alt="Bárbara Espinola" style="border-radius: 50%; width: 80px; height: 80px; object-fit: cover;">
-    </td>
-    <td style="padding: 10px;">
-      <h3 style="margin: 0; font-size: 1.2em;">Tomás Zarriello</h3>
-      <p style="margin: 5px 0;">
-        <a href="https://www.linkedin.com/in/tomas-zarriello/" style="text-decoration: none;">
-          <img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white" alt="LinkedIn">
-        </a>
-        <a href="https://github.com/Tommyx66" style="text-decoration: none; margin-left: 10px;">
-          <img src="https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white" alt="GitHub">
-        </a>
-      </p>
-      <img src="https://flagcdn.com/64x48/ar.png" alt="ar flag" style="width: 32px; height: 24px; margin-top: 5px;">
     </td>
   </tr>
 </table>
